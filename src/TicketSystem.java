@@ -37,4 +37,30 @@ public class TicketSystem {
         }
         return availableBerths.get(0);
     }
+
+    void cancelTickets(String ticketId){
+       Optional<Passenger> passengerOpt = confirmedPassenger.stream().filter(p -> p.ticketId.equals(ticketId)).findFirst();
+       if(passengerOpt.isPresent()){
+            Passenger passenger = passengerOpt.get();
+            confirmedPassenger.remove(passenger);
+            availableBerths.add(passenger.allocatedBerth);
+
+            if(!racQueue.isEmpty()){
+                Passenger racPass = racQueue.poll();
+                racPass.allocatedBerth = allocatedBerth(racPass.age,racPass.gender, racPass.preferredBerth);
+                confirmedPassenger.add(racPass);
+                availableBerths.remove(racPass.allocatedBerth);
+                System.out.println("RAC ticket moved to confirmed: " + racPass);
+            }
+            if(!waitingListQueue.isEmpty()){
+                Passenger waitPass = waitingListQueue.poll();
+                waitPass.allocatedBerth = "RAC";
+                racQueue.offer(waitPass);
+                System.out.println("Waiting list ticket moved to RAC: " + waitPass);
+            }
+           System.out.println("Ticket cancelled successfully for ID: " + ticketId);
+       }else{
+           System.out.println("No ticket found with ID: " + ticketId);
+       }
+    }
 }
