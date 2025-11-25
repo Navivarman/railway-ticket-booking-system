@@ -40,6 +40,26 @@ public class TicketBooking {
 
                 case 3:
                     ticketSystem.viewConfirmedTickets();
+                    break;
+
+                case 4:
+                    ticketSystem.viewAvailableTickets();
+                    break;
+
+                case 5:
+                    ticketSystem.viewRacTickets();
+                    break;
+
+                case 6:
+                    ticketSystem.viewWaitingListTickets();
+                    break;
+
+                case 7:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice. Try again");
             }
         }
     }
