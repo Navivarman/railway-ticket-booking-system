@@ -7,7 +7,7 @@ public class TicketSystem {
     private final List<Passenger> confirmedPassenger = new ArrayList<>();
     private int ticketCounter = 1;
 
-    void bookingTickets(String name,int age,String gender,String berthPreference){
+    public void bookingTickets(String name,int age,String gender,String berthPreference){
         String ticketId = "T"+ticketCounter++;
         Passenger passenger;
         if(!availableBerths.isEmpty()){
@@ -29,7 +29,7 @@ public class TicketSystem {
         }
     }
 
-    String allocatedBerth(int age,String gender,String berthPerference){
+    private String allocatedBerth(int age,String gender,String berthPerference){
         if(age > 60 || gender.equalsIgnoreCase("female") || availableBerths.contains("L")){
             return "L";
         }else if(availableBerths.contains(berthPerference)){
@@ -38,7 +38,7 @@ public class TicketSystem {
         return availableBerths.get(0);
     }
 
-    void cancelTickets(String ticketId){
+    public void cancelTickets(String ticketId){
        Optional<Passenger> passengerOpt = confirmedPassenger.stream().filter(p -> p.ticketId.equals(ticketId)).findFirst();
        if(passengerOpt.isPresent()){
             Passenger passenger = passengerOpt.get();
@@ -62,5 +62,44 @@ public class TicketSystem {
        }else{
            System.out.println("No ticket found with ID: " + ticketId);
        }
+    }
+
+    public void viewConfirmedTickets(){
+        if(confirmedPassenger.isEmpty()){
+            System.out.println("No confirmed tickets.");
+        }else{
+            System.out.println("Confirmed Tickets List");
+            for(Passenger p : confirmedPassenger){
+                System.out.println(p);
+            }
+        }
+    }
+
+    public void viewAvailableTickets(){
+        System.out.println("Available Berths: " + availableBerths.size());
+        System.out.println("Available RAC Tickets: " + (1 - racQueue.size()));
+        System.out.println("Available Waiting List Tickets: " + (1 - waitingListQueue.size()));
+    }
+
+    public void viewRacTickets(){
+        if (racQueue.isEmpty()) {
+            System.out.println("No RAC tickets.");
+        } else {
+            System.out.println("RAC Tickets:");
+            for (Passenger passenger : racQueue) {
+                System.out.println(passenger);
+            }
+        }
+    }
+
+    public void viewWaitingListTickets() {
+        if (waitingListQueue.isEmpty()) {
+            System.out.println("No Waiting List tickets.");
+        } else {
+            System.out.println("Waiting List Tickets:");
+            for (Passenger passenger : waitingListQueue) {
+                System.out.println(passenger);
+            }
+        }
     }
 }
